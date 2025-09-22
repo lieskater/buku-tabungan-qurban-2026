@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabungan Qurban 2026 Kelompok Parakan Muncang</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .box-1 {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      h2, h3, h4 {
+        margin: 0 0 10px 0;
+      }
+      .nama {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .data-table th, .data-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .data-table th {
+        background-color: #7a7a7a;
+      }
+      .jumlah {
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+      .tab {
+        background-color: #4CAF50;
+        color: white;
+      }
+      @media (max-width: 600px) {
+      body {
+        margin: 5px;
+      }
+      .box-1 {
+        padding: 10px;
+        font-size: 1em;
+      }
+      h2, h3, h4 {
+        font-size: 1em;
+      }
+      .nama, .jumlah {
+        font-size: 1em;
+        margin-bottom: 10px;
+      }
+      .data-table th, .data-table td {
+        padding: 4px;
+        font-size: 0.9em;
+      }
+      .data-table {
+        font-size: 0.95em;
+        overflow-x: auto;
+        display: block;
+      }
+      .footer {
+        font-size: 0.9em;
+      }
+    }
+    </style>
+  </head>
+<body>
+
+  <!-- Modal login dengan input kode ID -->
+<div id="loginModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0, 0, 0, 0.4);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;padding:20px;border-radius:8px;min-width:250px;text-align:center;">
+    <h3>Nama Anda</h3>
+    <input id="searchNama" type="text" placeholder="Cari Nama..." style="width:100%;padding:8px;margin-bottom:10px;" />
+    <ul id="namaList" style="list-style:none;padding:0;margin-bottom:10px;max-height:120px;overflow-y:auto;border:1px solid #ccc;"></ul>
+    <input id="idInput" type="text" placeholder="Masukkan Kode ID" style="width:50%;padding:8px;margin-bottom:10px;" />
+    <button id="loginBtn" style="padding:8px 16px;">Login</button>
+  </div>
+</div>
+  </div>
+</div>
+
+  <div class = 'box-1'>
+    <h2>TABUNGAN QURBAN 2025</h2>
+    <h3>KELOMPOK PARAKAN MUNCANG</h3>
+  </div>
+  <div>
+    <h4>NAMA  :</h4>
+    <p class="nama">...........</p>
+  </div>
+  
+    
+    
+
+<div>
+  <table border="1" class="data-table">
+    <thead class="tab">
+      <tr>
+        <th>Tanggal</th>
+        <th>Nama</th>
+        <th>Masuk</th>
+      </tr>
+
+    </thead>
+    <tbody></tbody>
+  </table>
+</div> 
+<p> JUMLAH TABUNGAN :</p>
+<p class="jumlah"> Rp.  </p>
+<p class="footer"> Parakan Muncang - Baitul Ilmi </p>
+
+
+<script>
+    const users = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUH9LHj_-ilnvgdDSq5Tsw3e3NOY49ji-cbjPhe19HWOCBASsuNT7u0Ebx0sEvA5sqVgweTZrfrYLt/pub?gid=0&single=true&output=csv';
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4tMVxtO_7_CCDH2N58l6IrCiWMJyWPbut6p_2ETr1_mWwVgE12q-GZQpBCf90cqy8Opx3YVImHzpY/pub?gid=0&single=true&output=csv';
+    // let user = null;
+
+    // do {
+    //   user = prompt("Masukkan Nama Anda (sesuai absen):").trim();
+    // } while (!user);
+
+    // const disp_name = document.querySelector('.nama').textContent = user;
+    // fetch(sheetURL)
+    // .then(response => response.text())
+    // .then(csv => {
+    // const parsed = Papa.parse(csv, { header: true });
+    // const rows = parsed.data;
+    // const tbody = document.querySelector('.data-table tbody');
+    // let total = 0;
+
+    // rows.forEach(row => {
+    //   const tr = document.createElement('tr');
+    //   tr.innerHTML = `<td>${row.TANGGAL}</td><td>${row.NAMA}</td><td>${row[' MASUK ']}</td>`;
+      
+    //   if (row.NAMA == user){
+    //     tbody.appendChild(tr);
+    //   const masuk = parseInt(row[' MASUK '].replace(/\D/g, ''), 10) || 0;
+    //   total += masuk;   
+    //   document.querySelector('.jumlah').textContent = 'Rp. ' + total.toLocaleString();
+    //     };
+    //   })
+    // });
+
+
+let user = null;
+let userId = null;
+let nativeID = null; // Menyimpan ID asli dari data
+
+fetch(users)
+  .then(response => response.text())
+  .then(csv => {
+    const parsed = Papa.parse(csv, { header: true });
+    const rows = parsed.data;
+
+    // Ambil nama unik
+    const namaSet = new Set();
+    rows.forEach(row => {
+      if (row.username) namaSet.add(row.username.trim());
+    });
+    const namaArr = Array.from(namaSet);
+
+    const searchInput = document.getElementById('searchNama');
+    const namaList = document.getElementById('namaList');
+    let selectedNama = '';
+
+    // Fungsi render list nama
+    function renderNamaList(filter = '') {
+      namaList.innerHTML = '';
+      namaArr
+        .filter(nama => nama.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(nama => {
+          const li = document.createElement('li');
+          li.textContent = nama;
+          li.style.padding = '6px';
+          li.style.cursor = 'pointer';
+          li.onclick = function() {
+            selectedNama = nama;
+            searchInput.value = nama;
+            // Highlight pilihan
+            Array.from(namaList.children).forEach(child => child.style.background = '');
+            li.style.background = '#e0e0e0';
+          };
+          namaList.appendChild(li);
+        });
+    }
+
+    // Render awal
+    renderNamaList();
+
+    // Event search
+    searchInput.addEventListener('input', function() {
+      renderNamaList(this.value);
+      selectedNama = '';
+    });
+
+    // Login button event
+    document.getElementById('loginBtn').onclick = function() {
+      const inputId = document.getElementById('idInput').value.trim();
+      const namaLogin = selectedNama || searchInput.value.trim();
+      if (!namaLogin || !inputId) {
+        alert('Silakan pilih/cari nama dan masukkan kode ID!');
+        return;
+      }
+      // Cari ID asli berdasarkan nama yang dipilih
+      const userRow = rows.find(row => row.username === namaLogin);
+      const nativeID = userRow ? userRow.pasword.trim() : null;
+      if (inputId !== nativeID) {
+        alert('Kode ID salah! Silakan coba lagi.');
+        return;
+      }
+      user = namaLogin;
+      document.getElementById('loginModal').style.display = 'none';
+      document.querySelector('.nama').textContent = user;
+      // ...lanjutkan proses menampilkan data sesuai user...
+      loadDataForUser();
+    };
+  });
+
+
+
+function loadDataForUser() {
+  if (!user) return;
+  fetch(sheetURL)
+  .then(response => response.text())
+  .then(csv => {
+    const parsed = Papa.parse(csv, { header: true });
+    const rows = parsed.data;
+
+    //Tampilkan data sesuai nama user
+      const tbody = document.querySelector('.data-table tbody');
+      tbody.innerHTML = '';
+      let total = 0;
+      rows.forEach(row => {
+         
+        if (row.NAMA == user) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${row.TANGGAL}</td><td>${row.NAMA}</td><td>${row[' MASUK ']}</td>`;
+          tbody.appendChild(tr);
+          const masuk = parseInt(row[' MASUK '].replace(/\D/g, ''), 10) || 0;
+          total += masuk;
+        }
+      }
+      );
+      document.querySelector('.jumlah').textContent = 'Rp. ' + total.toLocaleString();
+      
+    }
+  )
+  }
+
+  
+
+
+  </script>
+
+</body>
+</html> 
